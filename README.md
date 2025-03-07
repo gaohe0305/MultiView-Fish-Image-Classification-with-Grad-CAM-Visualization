@@ -66,6 +66,7 @@ Run the train.py script to perform training and validation. This script includes
 
 
 <br>* Generate Grad-CAM visualizations (original images, heatmaps, and overlay images) for each view (side, back, belly) and save them in the Grad-CAM directory.
+![图片2](https://github.com/user-attachments/assets/ffa5722b-91ba-4656-bed6-f31bdb01a827)
 
 ## Model Architecture
 <br>* Multi-branch ResNet: Three independent ResNet18 branches extract features from the side, back, and belly views.
