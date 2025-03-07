@@ -135,7 +135,7 @@ class MultiBranchResNet(nn.Module):
         f2 = self.branch2(x2).view(x2.size(0), -1)
         f3 = self.branch3(x3).view(x3.size(0), -1)
         concat_feat = torch.cat([f1, f2, f3], dim=1)
-        att_weights = self.attention_fc(concat_feat)  # (batch, 3)
+        att_weights = self.attention_fc(concat_feat)  # 返回形状：(batch, 3)
         alpha1 = att_weights[:, 0].unsqueeze(1)
         alpha2 = att_weights[:, 1].unsqueeze(1)
         alpha3 = att_weights[:, 2].unsqueeze(1)
@@ -269,3 +269,29 @@ def save_gradcam_visualization_for_view(model, fish_entry, view, device, save_di
     cv2.imwrite(os.path.join(save_dir, f"{filename_prefix}_{view}_gradcam_heatmap.png"), (heatmap*255).astype(np.uint8))
     cv2.imwrite(os.path.join(save_dir, f"{filename_prefix}_{view}_overlay.png"), (overlay*255).astype(np.uint8))
     print(f"Grad-CAM for {view} saved as {filename_prefix}_{view} images.")
+
+# ----------------------------
+# 3. Main部分：为每个类别选择一个正确分类的样本，并生成三视角Grad-CAM图像
+# ----------------------------
+if __name__ == "__main__":
+    # 使用验证集和模型，筛选每个类别中第一个分类正确的样本
+    correct_samples_per_class = {}
+    with torch.no_grad():
+        for batch_idx, (images_tuple, labels) in enumerate(val_loader):
+            x1, x2, x3 = images_tuple
+            x1, x2, x3, labels = x1.to(device), x2.to(device), x3.to(device), labels.to(device)
+            outputs, _ = model(x1, x2, x3)
+            _, preds = outputs.max(1)
+            for i in range(labels.size(0)):
+                idx_in_dataset = batch_idx * val_loader.batch_size + i
+                cls, fish_id = val_dataset.fish_list[idx_in_dataset]
+                # 如果预测正确且该类别还未选取样本，则保存该样本
+                if preds[i] == labels[i] and cls not in correct_samples_per_class:
+                    correct_samples_per_class[cls] = (cls, fish_id)
+    print("Selected correct samples per class for Grad-CAM visualization:")
+    for cls, sample in correct_samples_per_class.items():
+        print(f"Class: {cls}, Fish ID: {sample[1]}")
+        # 对于每个正确的样本，生成三视角的Grad-CAM图像
+        for view in ["side", "back", "belly"]:
+            save_gradcam_visualization_for_view(model, sample, view, device, filename_prefix=f"{cls}_{sample[1]}")
+
