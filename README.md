@@ -12,7 +12,9 @@ Multi-view fish image classification using PyTorch. Three ResNet18 models extrac
 <br>tqdm
 <br>Pillow
 <br>Install the required packages with:
+
 <br>``` pip install torch torchvision opencv-python scikit-learn matplotlib pandas tqdm pillow ```
+
 ## Data Preparation
 <br>Organize your dataset using the following structure,(You can also check the `data` folder):
 <br>data/
@@ -36,7 +38,9 @@ Multi-view fish image classification using PyTorch. Three ResNet18 models extrac
 ## Usage
 ### 1. Train the Model
 Run the train.py script to perform training and validation. This script includes data augmentation, logging, confusion matrix & classification report generation, as well as attention weight statistics and visualization.
-<br>    ```python train.py```
+
+<br>``` python train.py ```
+
 <br> During training, the best model weights will be automatically saved as best_model_attention.pth. Additional files generated include:
 <br>* training_log.txt: Logs for each epoch.
 <br>* training_curves.png: Plots of training and validation loss & accuracy.
@@ -44,7 +48,9 @@ Run the train.py script to perform training and validation. This script includes
 <br>* attention_weights.xlsx: Excel file with attention weight statistics, along with visualizations (boxplot and bar chart images).
 ### 2. Evaluate and Visualize with Grad-CAM
 <br>Run the eval_gradcam.py script to evaluate the model on the validation set and generate Grad-CAM visualizations.
+
 <br>    ```python eval_gradcam.py```
+
 <br>This script will:
 <br>* Load the best saved model weights.
 <br>* Predict on the validation set and save correctly and incorrectly classified samples into the correct_samples and incorrect_samples directories.
