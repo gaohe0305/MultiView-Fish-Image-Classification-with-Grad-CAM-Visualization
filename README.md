@@ -43,9 +43,16 @@ Run the train.py script to perform training and validation. This script includes
 
 <br> During training, the best model weights will be automatically saved as best_model_attention.pth. Additional files generated include:
 <br>* training_log.txt: Logs for each epoch.
+
 <br>* training_curves.png: Plots of training and validation loss & accuracy.
+![training_curves](https://github.com/user-attachments/assets/c7f6ebdf-b9dd-45b7-9f28-2462e7d68bd3)
+
 <br>* confusion_matrix.txt and classification_report.txt: Evaluation metrics.
 <br>* attention_weights.xlsx: Excel file with attention weight statistics, along with visualizations (boxplot and bar chart images).
+
+![attention_weights_barplot](https://github.com/user-attachments/assets/ea4ed0a7-9ee8-4961-8094-17727901943c)
+
+
 ### 2. Evaluate and Visualize with Grad-CAM
 <br>Run the eval_gradcam.py script to evaluate the model on the validation set and generate Grad-CAM visualizations.
 
@@ -53,8 +60,13 @@ Run the train.py script to perform training and validation. This script includes
 
 <br>This script will:
 <br>* Load the best saved model weights.
+
 <br>* Predict on the validation set and save correctly and incorrectly classified samples into the correct_samples and incorrect_samples directories.
+![图片1](https://github.com/user-attachments/assets/e0746588-7cd5-4f43-a464-3eed399bd871)
+
+
 <br>* Generate Grad-CAM visualizations (original images, heatmaps, and overlay images) for each view (side, back, belly) and save them in the Grad-CAM directory.
+
 ## Model Architecture
 <br>* Multi-branch ResNet: Three independent ResNet18 branches extract features from the side, back, and belly views.
 <br>* Attention Mechanism: An attention module fuses the features from all branches by learning the relative importance of each view.
